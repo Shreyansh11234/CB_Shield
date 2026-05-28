@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Fira+Code:wght@300;400;600&display=swap');
+
+:root {
+  --bg-color: #050505;
+  --panel-bg: rgba(0, 20, 0, 0.85);
+  --neon-green: #00ff41;
+  --dark-green: #008f11;
+  --alert-red: #ff003c;
+  --alert-yellow: #fce803;
+  --grid-color: rgba(0, 255, 65, 0.05);
+  
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  color: var(--neon-green);
+}
+
+body {
+  background-color: var(--bg-color);
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 30px 30px;
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* CRT Scanline Effect */
+body::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 999;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--dark-green);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-green);
+}

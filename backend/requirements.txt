@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+psutil
+scikit-learn
+sqlalchemy
+pydantic
+requests
+numpy
+python-dotenv
