@@ -7,7 +7,12 @@ SQLAlchemy engine + session factory for the SQLite database.
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./sentinel.db"
+import os
+
+if os.environ.get("VERCEL"):
+    SQLALCHEMY_DATABASE_URL = "sqlite:////tmp/sentinel.db"
+else:
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./sentinel.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,

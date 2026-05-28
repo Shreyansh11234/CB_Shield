@@ -5,8 +5,11 @@ import {
 } from 'lucide-react';
 import './App.css';
 
-const WS_URL = 'ws://localhost:8000/ws';
-const API    = 'http://localhost:8000';
+const API = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+  ? 'http://localhost:8000'
+  : window.location.origin;
+
+const WS_URL = API.replace(/^http/, 'ws') + '/ws';
 
 function CyberBar({ value = 0, label, color = "var(--neon-green)" }) {
   return (
@@ -46,11 +49,22 @@ export default function App() {
 
   useEffect(() => {
     let reconnectTimer;
+    let pollTimer;
+    let ws;
+
     function connect() {
       setWsState('connecting');
-      const ws = new WebSocket(WS_URL);
+      ws = new WebSocket(WS_URL);
       wsRef.current = ws;
-      ws.onopen = () => setWsState('open');
+      
+      ws.onopen = () => {
+        setWsState('open');
+        if (pollTimer) {
+          clearInterval(pollTimer);
+          pollTimer = null;
+        }
+      };
+
       ws.onmessage = (evt) => {
         try {
           const payload = JSON.parse(evt.data);
@@ -60,14 +74,39 @@ export default function App() {
           }
         } catch { }
       };
+
       ws.onclose = () => {
         setWsState('closed');
-        reconnectTimer = setTimeout(connect, 3000);
+        // If closed, immediately trigger fallback HTTP polling
+        if (!pollTimer) {
+          pollTimer = setInterval(pollStats, 2000);
+        }
+        reconnectTimer = setTimeout(connect, 5000);
       };
+
       ws.onerror = () => ws.close();
     }
+
+    async function pollStats() {
+      try {
+        const r = await fetch(`${API}/api/stats`);
+        const payload = await r.json();
+        setData(payload);
+        setWsState('open'); // mock active status for UI during polling
+        if (payload.alerts?.length) {
+          setAlerts(prev => [...payload.alerts, ...prev].slice(0, 50));
+        }
+      } catch (err) {
+        console.warn("Polling fallback failed:", err);
+      }
+    }
+
     connect();
-    return () => { clearTimeout(reconnectTimer); wsRef.current?.close(); };
+    return () => { 
+      clearTimeout(reconnectTimer); 
+      if (pollTimer) clearInterval(pollTimer);
+      wsRef.current?.close(); 
+    };
   }, []);
 
   async function killProcess(pid) {

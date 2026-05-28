@@ -88,6 +88,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Sentinel AI", version="2.0.0", lifespan=lifespan)
 
+# Ensure database tables are created immediately (needed for serverless cold starts)
+try:
+    Base.metadata.create_all(bind=engine)
+    logger.info("Database tables created/verified globally.")
+except Exception as e:
+    logger.error("Failed to verify database tables: %s", e)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -98,6 +105,45 @@ app.add_middleware(
 
 
 # ── Routes ────────────────────────────────────────────────────────────────────
+
+# Serverless broadcast target
+_last_tick_payload = {}
+
+async def _serverless_broadcast(payload):
+    global _last_tick_payload
+    _last_tick_payload = payload
+
+@app.get("/api/stats", tags=["Monitoring"])
+async def get_stats():
+    """Dynamically trigger a monitor poll (fallback for serverless)."""
+    from monitor import _tick
+    try:
+        await _tick(_serverless_broadcast)
+    except Exception as e:
+        logger.error("Error in serverless tick: %s", e)
+    
+    # Save any new alerts to DB
+    if _last_tick_payload and "alerts" in _last_tick_payload and _last_tick_payload["alerts"]:
+        db = SessionLocal()
+        try:
+            from datetime import datetime
+            import models
+            for alert in _last_tick_payload["alerts"]:
+                db_alert = models.Alert(
+                    timestamp=datetime.fromtimestamp(alert["timestamp"]),
+                    risk_level=alert["risk_level"],
+                    description=alert["description"],
+                    source=alert["source"],
+                )
+                db.add(db_alert)
+            db.commit()
+        except Exception as e:
+            logger.error("Failed to save serverless alerts: %s", e)
+        finally:
+            db.close()
+            
+    return _last_tick_payload
+
 
 @app.get("/", tags=["Health"])
 async def health():
