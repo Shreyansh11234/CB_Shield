@@ -134,21 +134,21 @@ export default function App() {
         <div className="landing-card">
           <h1 className="landing-header">
             <Terminal size={48} style={{ verticalAlign: 'middle', marginRight: '10px', color: 'var(--neon-green)' }} />
-            SENTINEL_AI
+            WARDENS_AI
           </h1>
           
           <div style={{ lineHeight: '1.6', fontSize: '0.95rem' }}>
             <p>
-              Welcome to the digital frontline. <strong>Sentinel AI</strong> is an advanced system monitoring and intrusion detection system designed to inspect processes, active network connections, CPU/RAM utilization metrics, and identify anomalies using local machine learning engines in real-time.
+              Welcome to the digital frontline. <strong>Wardens_AI</strong> is an advanced system monitoring and intrusion detection system designed to inspect processes, active network connections, CPU/RAM utilization metrics, and identify anomalies using local machine learning engines in real-time.
             </p>
 
             <div className="nindo-box">
-              <div className="nindo-title">SHREYANSH KUMAR RAO'S NINDO (忍者クリード)</div>
+              <div className="nindo-title">nindo - aka shreyansh kumar rao</div>
               "To protect the integrity of our digital systems, safeguard user trust, monitor anomalies tirelessly, and never back down in the face of threats — that is my Nindo!"
             </div>
 
             <p style={{ marginTop: '1rem' }}>
-              Built as a shield against digital threats, Sentinel AI implements live Isolation Forest anomaly forecasting, automated firewall rule injection, and system health checks on a cybernetic visual telemetry console.
+              Built as a shield against digital threats, Wardens_AI implements live Isolation Forest anomaly forecasting, automated firewall rule injection, and system health checks on a cybernetic visual telemetry console.
             </p>
           </div>
 
@@ -189,9 +189,9 @@ export default function App() {
     <div className="dashboard">
       <header className="header">
         <div>
-          <div className="sys-prompt">root@sentinel:~# ./monitor.sh</div>
+          <div className="sys-prompt">root@wardens:~# ./monitor.sh</div>
           <h1 className="glitch-title">
-            <Terminal size={40} /> SENTINEL_AI<span className="blink-cursor">_</span>
+            <Terminal size={40} /> WARDENS_AI<span className="blink-cursor">_</span>
           </h1>
         </div>
         <div className={`badge ${badgeClass}`}>
