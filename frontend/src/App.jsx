@@ -42,12 +42,15 @@ function RiskDisplay({ score = 0 }) {
 }
 
 export default function App() {
-  const [data, setData]       = useState(null);
-  const [alerts, setAlerts]   = useState([]);
-  const [wsState, setWsState] = useState('connecting');
+  const [isScanning, setIsScanning] = useState(false);
+  const [data, setData]             = useState(null);
+  const [alerts, setAlerts]         = useState([]);
+  const [wsState, setWsState]       = useState('connecting');
   const wsRef = useRef(null);
 
   useEffect(() => {
+    if (!isScanning) return;
+
     let reconnectTimer;
     let pollTimer;
     let ws;
@@ -107,7 +110,7 @@ export default function App() {
       if (pollTimer) clearInterval(pollTimer);
       wsRef.current?.close(); 
     };
-  }, []);
+  }, [isScanning]);
 
   async function killProcess(pid) {
     try {
@@ -123,6 +126,49 @@ export default function App() {
       const d = await r.json();
       console.log(d.message);
     } catch { console.error('Block failed'); }
+  }
+
+  if (!isScanning) {
+    return (
+      <div className="landing-screen">
+        <div className="landing-card">
+          <h1 className="landing-header">
+            <Terminal size={48} style={{ verticalAlign: 'middle', marginRight: '10px', color: 'var(--neon-green)' }} />
+            SENTINEL_AI
+          </h1>
+          
+          <div style={{ lineHeight: '1.6', fontSize: '0.95rem' }}>
+            <p>
+              Welcome to the digital frontline. <strong>Sentinel AI</strong> is an advanced system monitoring and intrusion detection system designed to inspect processes, active network connections, CPU/RAM utilization metrics, and identify anomalies using local machine learning engines in real-time.
+            </p>
+
+            <div className="nindo-box">
+              <div className="nindo-title">SHREYANSH KUMAR RAO'S NINDO (忍者クリード)</div>
+              "To protect the integrity of our digital systems, safeguard user trust, monitor anomalies tirelessly, and never back down in the face of threats — that is my Nindo!"
+            </div>
+
+            <p style={{ marginTop: '1rem' }}>
+              Built as a shield against digital threats, Sentinel AI implements live Isolation Forest anomaly forecasting, automated firewall rule injection, and system health checks on a cybernetic visual telemetry console.
+            </p>
+          </div>
+
+          <div className="landing-meta">
+            <div>
+              <strong>SYSTEM ARCHITECT:</strong><br />
+              Shreyansh Kumar Rao
+            </div>
+            <div>
+              <strong>NINDO MISSION:</strong><br />
+              Shield, Detect, and Eliminate
+            </div>
+          </div>
+
+          <button className="btn-scan-start" onClick={() => setIsScanning(true)}>
+            INITIALIZE SECURITY SCAN &gt;
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (!data) {

@@ -294,3 +294,113 @@ tr:hover td {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(200%); }
 }
+
+/* ── Landing Page Styles ────────────────────────────────────────────────── */
+.landing-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Fira Code', monospace;
+  position: relative;
+  background: radial-gradient(circle at center, rgba(0, 20, 5, 0.4) 0%, rgba(0, 0, 0, 1) 80%);
+}
+
+.landing-card {
+  max-width: 650px;
+  background: rgba(0, 10, 2, 0.85);
+  border: 1.5px solid var(--dark-green);
+  padding: 2.5rem;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.15), inset 0 0 20px rgba(0, 255, 65, 0.05);
+  position: relative;
+  border-radius: 4px;
+}
+
+.landing-card::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px;
+  width: 25px; height: 25px;
+  border-top: 3px solid var(--neon-green);
+  border-left: 3px solid var(--neon-green);
+}
+
+.landing-card::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; right: -2px;
+  width: 25px; height: 25px;
+  border-bottom: 3px solid var(--neon-green);
+  border-right: 3px solid var(--neon-green);
+}
+
+.landing-header {
+  font-family: 'VT323', monospace;
+  font-size: 3.5rem;
+  color: var(--neon-green);
+  text-align: center;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px var(--neon-green);
+}
+
+.landing-meta {
+  border-top: 1px dashed var(--dark-green);
+  border-bottom: 1px dashed var(--dark-green);
+  padding: 1rem 0;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  color: var(--dark-green);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.landing-meta strong {
+  color: var(--neon-green);
+}
+
+.nindo-box {
+  background: rgba(0, 255, 65, 0.03);
+  border-left: 3px solid var(--neon-green);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #d1ffd6;
+}
+
+.nindo-title {
+  font-family: 'VT323', monospace;
+  font-size: 1.4rem;
+  color: var(--neon-green);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+.btn-scan-start {
+  display: block;
+  width: 100%;
+  padding: 1.2rem;
+  margin-top: 2rem;
+  font-family: 'VT323', monospace;
+  font-size: 1.8rem;
+  color: #000;
+  background: var(--neon-green);
+  border: none;
+  cursor: pointer;
+  text-shadow: none;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+  transition: all 0.3s ease;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.btn-scan-start:hover {
+  background: #fff;
+  box-shadow: 0 0 30px #fff;
+  transform: translateY(-2px);
+}
+
